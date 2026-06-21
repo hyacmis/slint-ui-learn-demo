@@ -1,0 +1,18 @@
+export struct ImageInfo {
+    file-name: string,
+    file-path: string,
+    img-width: int,
+    img-height: int,
+    open-count: int,
+}
+
+export global ImageModel {
+    in-out property <image> image-source;
+    in-out property <ImageInfo> info;
+    in-out property <float> zoom: 1.0;
+    in-out property <bool> fit-window: false;
+    in-out property <int> bg-index: 0;
+
+    callback open-clicked;
+    callback save-clicked;
+}

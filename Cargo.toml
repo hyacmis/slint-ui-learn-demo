@@ -9,6 +9,7 @@ version = "0.1.0"
 members = [
     # 入门级
     "L1-calc",
+    "L1-image-viewer",
     # 基础级
     "L2-tab",
     "L2-sidebar",

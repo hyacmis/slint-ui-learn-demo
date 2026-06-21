@@ -1,0 +1,84 @@
+import { VerticalBox } from "std-widgets.slint";
+import { FluentTokens } from "../tokens/fluent-tokens.slint";
+
+export component ImageCanvas inherits Rectangle {
+    in property <image> image-source;
+    in property <int> img-width;
+    in property <int> img-height;
+    in property <float> zoom;
+    in property <bool> fit-window;
+    in property <int> bg-index;
+
+    property <length> pan-x: 0px;
+    property <length> pan-y: 0px;
+    property <length> drag-start-x;
+    property <length> drag-start-y;
+    property <length> pan-start-x;
+    property <length> pan-start-y;
+    property <bool> prev-pressed;
+    callback reset;
+
+    background: bg-index == 0 ? #1e1e1e : bg-index == 1 ? #f5f5f5 : #e8e8e8;
+    clip: true;
+    vertical-stretch: 1;
+
+    reset => {
+        root.pan-x = 0px;
+        root.pan-y = 0px;
+    }
+
+    Image {
+        source: root.image-source;
+        width: root.fit-window ? parent.width : (root.img-width * 1px) * root.zoom;
+        height: root.fit-window ? parent.height : (root.img-height * 1px) * root.zoom;
+        image-fit: root.fit-window ? contain : fill;
+        x: (parent.width - self.width) / 2 + root.pan-x;
+        y: (parent.height - self.height) / 2 + root.pan-y;
+    }
+
+    if root.img-width == 0: Rectangle {
+        background: transparent;
+
+        VerticalBox {
+            alignment: center;
+            spacing: FluentTokens.space-md;
+
+            Path {
+                width: 48px;
+                height: 48px;
+                stroke: FluentTokens.neutral-text-tertiary;
+                stroke-width: 1.5px;
+                commands: "M 10 10 L 38 10 L 38 38 L 10 38 Z";
+            }
+
+            Text {
+                text: "点击打开按钮选择图片";
+                font-size: 14px;
+                color: FluentTokens.neutral-text-tertiary;
+                horizontal-alignment: center;
+            }
+        }
+    }
+
+    touch := TouchArea {
+        width: 100%;
+        height: 100%;
+
+        moved => {
+            if (touch.pressed) {
+                if (!root.prev-pressed) {
+                    root.drag-start-x = touch.mouse-x;
+                    root.drag-start-y = touch.mouse-y;
+                    root.pan-start-x = root.pan-x;
+                    root.pan-start-y = root.pan-y;
+                    root.prev-pressed = true;
+                } else {
+                    root.pan-x = root.pan-start-x + (touch.mouse-x - root.drag-start-x);
+                    root.pan-y = root.pan-start-y + (touch.mouse-y - root.drag-start-y);
+                }
+            } else {
+                root.prev-pressed = false;
+            }
+        }
+    }
+}

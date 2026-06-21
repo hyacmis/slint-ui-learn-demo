@@ -1,0 +1,138 @@
+import { VerticalBox } from "std-widgets.slint";
+import { FluentTokens } from "../tokens/fluent-tokens.slint";
+
+export component InfoPanel inherits Rectangle {
+    width: 220px;
+    vertical-stretch: 1;
+    background: FluentTokens.neutral-card;
+
+    in property <string> file-name;
+    in property <string> file-path;
+    in property <int> img-width;
+    in property <int> img-height;
+    in property <int> open-count;
+
+    VerticalBox {
+        spacing: 0px;
+        padding: FluentTokens.space-lg;
+
+        Rectangle {
+            background: FluentTokens.neutral-bg;
+            border-radius: FluentTokens.radius-md;
+            border-width: 1px;
+            border-color: FluentTokens.neutral-stroke-subtle;
+
+            VerticalBox {
+                padding: FluentTokens.space-md;
+                spacing: FluentTokens.space-xs;
+
+                Text {
+                    text: "文件信息";
+                    font-size: 12px;
+                    font-weight: 600;
+                    color: FluentTokens.neutral-text-tertiary;
+                }
+
+                Rectangle { height: FluentTokens.space-xs; }
+
+                Text {
+                    text: "名称";
+                    font-size: 12px;
+                    color: FluentTokens.neutral-text-tertiary;
+                }
+                Text {
+                    text: root.file-name;
+                    font-size: 14px;
+                    color: FluentTokens.neutral-text-primary;
+                    font-weight: 600;
+                    wrap: word-wrap;
+                }
+
+                Rectangle { height: FluentTokens.space-sm; }
+
+                Text {
+                    text: "路径";
+                    font-size: 12px;
+                    color: FluentTokens.neutral-text-tertiary;
+                }
+                Text {
+                    text: root.file-path;
+                    font-size: 11px;
+                    color: FluentTokens.neutral-text-secondary;
+                    wrap: word-wrap;
+                }
+
+                Rectangle { height: FluentTokens.space-sm; }
+
+                Text {
+                    text: "尺寸";
+                    font-size: 12px;
+                    color: FluentTokens.neutral-text-tertiary;
+                }
+                Text {
+                    text: root.img-width > 0 ? root.img-width + " × " + root.img-height + " px" : "无";
+                    font-size: 14px;
+                    color: FluentTokens.neutral-text-primary;
+                    font-weight: 600;
+                }
+
+                Rectangle { height: FluentTokens.space-sm; }
+
+                Text {
+                    text: "打开次数";
+                    font-size: 12px;
+                    color: FluentTokens.neutral-text-tertiary;
+                }
+                Text {
+                    text: root.open-count + " 次";
+                    font-size: 14px;
+                    color: FluentTokens.brand-primary;
+                    font-weight: 600;
+                }
+            }
+        }
+
+        Rectangle { height: FluentTokens.space-lg; }
+
+        Rectangle {
+            background: FluentTokens.neutral-bg;
+            border-radius: FluentTokens.radius-md;
+            border-width: 1px;
+            border-color: FluentTokens.neutral-stroke-subtle;
+
+            VerticalBox {
+                padding: FluentTokens.space-md;
+                spacing: FluentTokens.space-sm;
+                alignment: center;
+
+                Text {
+                    text: "形状";
+                    font-size: 12px;
+                    font-weight: 600;
+                    color: FluentTokens.neutral-text-tertiary;
+                    horizontal-alignment: center;
+                }
+
+                Path {
+                    width: 48px;
+                    height: 48px;
+                    stroke: #0078d4;
+                    stroke-width: 2px;
+                    fill: #0078d420;
+                    commands: "M 4 24 L 44 24 M 24 4 L 24 44";
+                }
+
+                Path {
+                    width: 48px;
+                    height: 48px;
+                    stroke: #d13438;
+                    stroke-width: 2px;
+                    fill: #d1343820;
+                    commands: "M 4 4 L 44 44 M 4 44 L 44 4";
+                }
+            }
+        }
+
+        Rectangle { vertical-stretch: 1; }
+    }
+}

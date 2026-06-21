@@ -1,0 +1,150 @@
+import { VerticalBox, HorizontalBox, Button, Slider, ComboBox } from "std-widgets.slint";
+import { FluentTokens } from "tokens/fluent-tokens.slint";
+import { ImageModel } from "viewmodel/image.slint";
+import { InfoPanel } from "components/info-panel.slint";
+import { ImageCanvas } from "components/image-canvas.slint";
+import { StatusBar } from "components/status-bar.slint";
+export { ImageModel }
+
+export component AppWindow inherits Window {
+    width: 960px;
+    height: 680px;
+    title: "图片浏览器";
+    background: FluentTokens.neutral-bg;
+
+    VerticalBox {
+        spacing: 0px;
+        padding: 0px;
+
+        // CommandBar
+        Rectangle {
+            height: 48px;
+            background: FluentTokens.neutral-card;
+
+            HorizontalLayout {
+                padding-left: FluentTokens.space-lg;
+                padding-right: FluentTokens.space-lg;
+                spacing: FluentTokens.space-sm;
+                alignment: start;
+
+                Text {
+                    text: "图片浏览器";
+                    font-size: 16px;
+                    font-weight: 600;
+                    color: FluentTokens.neutral-text-primary;
+                    vertical-alignment: center;
+                    width: 120px;
+                }
+
+                Rectangle { width: 1px; background: FluentTokens.neutral-stroke; height: 24px; }
+
+                Button {
+                    text: "打开";
+                    clicked => { ImageModel.open-clicked(); }
+                }
+
+                Button {
+                    text: "另存为";
+                    clicked => { ImageModel.save-clicked(); }
+                }
+
+                Rectangle { horizontal-stretch: 1; }
+
+                HorizontalLayout {
+                    spacing: FluentTokens.space-xs;
+                    alignment: center;
+
+                    Text {
+                        text: "缩放";
+                        font-size: 13px;
+                        color: FluentTokens.neutral-text-secondary;
+                        vertical-alignment: center;
+                    }
+
+                    Slider {
+                        width: 120px;
+                        minimum: 0.1;
+                        maximum: 5.0;
+                        value <=> ImageModel.zoom;
+                    }
+
+                    Text {
+                        text: Math.round(ImageModel.zoom * 100) + "%";
+                        font-size: 13px;
+                        color: FluentTokens.brand-primary;
+                        font-weight: 600;
+                        vertical-alignment: center;
+                        width: 44px;
+                    }
+                }
+
+                Rectangle { width: 1px; background: FluentTokens.neutral-stroke; height: 24px; }
+
+                Button {
+                    text: "重置";
+                    clicked => {
+                        ImageModel.zoom = 1.0;
+                        image_canvas.reset();
+                    }
+                }
+
+                Rectangle { width: 1px; background: FluentTokens.neutral-stroke; height: 24px; }
+
+                HorizontalLayout {
+                    spacing: FluentTokens.space-xs;
+                    alignment: center;
+
+                    Text {
+                        text: "背景";
+                        font-size: 13px;
+                        color: FluentTokens.neutral-text-secondary;
+                        vertical-alignment: center;
+                    }
+
+                    ComboBox {
+                        width: 80px;
+                        model: ["深色", "浅色", "网格"];
+                        current-index <=> ImageModel.bg-index;
+                    }
+                }
+            }
+        }
+
+        Rectangle { height: 1px; background: FluentTokens.neutral-stroke; }
+
+        // Main area
+        HorizontalBox {
+            spacing: 0px;
+            padding: 0px;
+            vertical-stretch: 1;
+
+            InfoPanel {
+                file-name: ImageModel.info.file-name;
+                file-path: ImageModel.info.file-path;
+                img-width: ImageModel.info.img-width;
+                img-height: ImageModel.info.img-height;
+                open-count: ImageModel.info.open-count;
+            }
+
+            Rectangle { width: 1px; background: FluentTokens.neutral-stroke; }
+
+            image_canvas := ImageCanvas {
+                image-source: ImageModel.image-source;
+                img-width: ImageModel.info.img-width;
+                img-height: ImageModel.info.img-height;
+                zoom: ImageModel.zoom;
+                fit-window: ImageModel.fit-window;
+                bg-index: ImageModel.bg-index;
+            }
+        }
+
+        Rectangle { height: 1px; background: FluentTokens.neutral-stroke; }
+
+        StatusBar {
+            file-name: ImageModel.info.file-name;
+            file-path: ImageModel.info.file-path;
+            zoom: ImageModel.zoom;
+            fit-window: ImageModel.fit-window;
+        }
+    }
+}
