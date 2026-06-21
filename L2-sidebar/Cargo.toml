@@ -1,5 +1,5 @@
 [package]
-name = "sidebar"
+name = "l2-sidebar"
 version = "0.1.0"
 edition = "2024"
 

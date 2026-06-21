@@ -6,9 +6,9 @@ pub fn startup(ui: Weak<AppWindow>) {
     // 启动时间
     // 窗口启动读取文件
     let num = fs::read_to_string("config.txt")
-        .expect("不存在该文件")
+        .unwrap_or_else(|_| "0".to_string())
         .parse::<i32>()
-        .expect("config.txt is not a number");
+        .unwrap_or(0);
 
     if let Some(ui) = ui.upgrade() {
         ui.global::<CalcModel>().set_num(num);

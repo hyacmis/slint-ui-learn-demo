@@ -1,16 +1,21 @@
 [package]
 edition = "2024"
-name = "slint-demo"
+name = "slint-ui-learn-demo"
 version = "0.1.0"
 
 [dependencies]
 
 [workspace]
 members = [
-    "calc",
-    "sidebar",
-    "spawn_local",
-    "tab",
-    "table",
-    "todo",
+    # 入门级
+    "L1-calc",
+    # 基础级
+    "L2-tab",
+    "L2-sidebar",
+    # 中级
+    "L3-table",
+    "L3-todo",
+    # 高级
+    "L4-spawn_local",
 ]
+exclude = ["template"]
